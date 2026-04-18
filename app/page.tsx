@@ -529,7 +529,7 @@ export default function Page() {
         pillarTextToItem("년주", saju.yearPillar),
         pillarTextToItem("월주", saju.monthPillar),
         pillarTextToItem("일주", saju.dayPillar),
-        pillarTextToItem("시주", unknownTime ? "--" : saju.hourPillar),
+        pillarTextToItem("시주", unknownTime ? "--" : (saju.hourPillar ?? "--")),
       ];
 
       const energy: EnergyType = {
