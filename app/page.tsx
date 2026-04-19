@@ -214,8 +214,9 @@ function getDaysInMonth(year: number, month: number, isLunar: boolean) {
   return Array.from({ length: lastDay }, (_, i) => i + 1);
 }
 
-function pillarTextToItem(label: string, pillarText: string): PillarItem {
-  const [gan = "-", ji = "-"] = pillarText.split("");
+function pillarTextToItem(label: string, pillarText?: string | null): PillarItem {
+  const safeText = pillarText ?? "--";
+  const [gan = "-", ji = "-"] = safeText.split("");
 
   return {
     label,
@@ -525,11 +526,17 @@ export default function Page() {
         unknownTime ? 12 : hour
       );
 
+      const yearPillarText = saju.yearPillar ?? "--";
+      const monthPillarText = saju.monthPillar ?? "--";
+      const dayPillarText = saju.dayPillar ?? "--";
+      const safeHourPillar = saju.hourPillar ?? "--";
+      const hourPillarText = unknownTime ? "시간 모름" : safeHourPillar;
+
       const pillars: PillarItem[] = [
-        pillarTextToItem("년주", saju.yearPillar),
-        pillarTextToItem("월주", saju.monthPillar),
-        pillarTextToItem("일주", saju.dayPillar),
-        pillarTextToItem("시주", unknownTime ? "--" : (saju.hourPillar ?? "--")),
+        pillarTextToItem("년주", yearPillarText),
+        pillarTextToItem("월주", monthPillarText),
+        pillarTextToItem("일주", dayPillarText),
+        pillarTextToItem("시주", unknownTime ? "--" : safeHourPillar),
       ];
 
       const energy: EnergyType = {
@@ -558,13 +565,8 @@ export default function Page() {
         ? "음력 입력값을 양력으로 변환한 뒤 사주를 계산했어요"
         : "입력한 양력 기준으로 사주를 계산했어요";
 
-      const yearPillarText = saju.yearPillar;
-      const monthPillarText = saju.monthPillar;
-      const dayPillarText = saju.dayPillar;
-      const hourPillarText = unknownTime ? "시간 모름" : saju.hourPillar;
-
-      const dayMaster = saju.dayPillar[0] ?? "-";
-      const dayBranch = saju.dayPillar[1] ?? "-";
+      const dayMaster = dayPillarText[0] ?? "-";
+      const dayBranch = dayPillarText[1] ?? "-";
 
       const summaryText = `${yearPillarText}년 · ${monthPillarText}월 · ${dayPillarText}일${
         unknownTime ? " · 시주 미입력" : ` · ${hourPillarText}시`
